@@ -6,3 +6,4 @@ python/dummy_tracks.py
 python/gen*
 python/model_detector.py
 python/voxel*
+python/track_*

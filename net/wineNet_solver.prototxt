@@ -1,0 +1,23 @@
+#The net slinked to this solver
+net: "wineNet.prototxt"
+#test_iter = # of fwd passes
+test_iter: 4
+#Test the training ever [test_interval] iterations
+test_interval: 25000
+
+#Base learning rate (step size in gradient descent)
+base_lr: 0.1
+#Analogous to physcial momentum: each iteration incorporates the weights which in acceleration from the gradient of loss
+momentum: 0.9
+#Learning rate policy
+lr_policy: "step"
+#Drop the learning rate by a factor of gamma every step-size iteration (HERE 90x)
+gamma: 0.01
+#Drop the learning rate every 100k iterations
+stepsize: 100000
+
+max_iter: 350000
+#display: 500
+display: 1
+
+solver_mode: GPU

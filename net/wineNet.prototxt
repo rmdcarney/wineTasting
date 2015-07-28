@@ -1,0 +1,82 @@
+name: "WineNet"
+layer {
+  name: "wine"
+  type: "Data"
+  include {
+    phase: TRAIN
+  }
+  data_param {
+    source: "../data/wine_train_lmdb"
+    backend: LMDB
+    batch_size: 50
+  }
+  top: "data"
+  top: "label"
+}
+layer {
+  name: "wine"
+  type: "Data"
+  include {
+    phase: TEST
+  }
+  data_param {
+    source: "../data/wine_test_lmdb"
+    backend: LMDB
+    batch_size: 20
+  }
+  top: "data"
+  top: "label"
+}
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "data"
+  top: "ip1"
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "ip1"
+  top: "ip1"
+}
+layer {
+	name: "ip2"
+	type: "InnerProduct"
+	bottom: "ip1"
+	top: "ip2"
+	inner_product_param {
+		num_output: 3
+		weight_filler {
+			type: "xavier"
+		}
+		bias_filler {
+			type: "xavier"
+		}
+	}
+}
+layer {
+	name: "accuracy"
+	type: "Accuracy"
+	bottom: "ip2"
+	bottom: "label"
+	top: "accuracy"
+	include {
+		phase: TEST
+	}
+}
+layer {
+	name: "loss"
+	type: "SoftmaxWithLoss"
+	bottom: "ip2"
+	bottom: "label"
+	top: "loss"
+}

@@ -1,0 +1,8 @@
+net/_iter*
+net/track*
+python/atlas*
+python/data*
+python/dummy_tracks.py
+python/gen*
+python/model_detector.py
+python/voxel*

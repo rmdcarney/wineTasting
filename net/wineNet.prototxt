@@ -8,7 +8,7 @@ layer {
   data_param {
     source: "../data/wine_train_lmdb"
     backend: LMDB
-    batch_size: 50
+    batch_size: 100
   }
   top: "data"
   top: "label"
@@ -22,7 +22,7 @@ layer {
   data_param {
     source: "../data/wine_test_lmdb"
     backend: LMDB
-    batch_size: 20
+    batch_size: 50
   }
   top: "data"
   top: "label"

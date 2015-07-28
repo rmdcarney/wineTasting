@@ -9,7 +9,7 @@ import csv
 import lmdb
 import numpy as np
 import caffe
-import deepdish as dd
+import shutil
 
 CSV_FILE = '../data/wine.csv'
 LMDB_FILE_TRAIN = '../data/wine_train_lmdb'
@@ -18,20 +18,10 @@ LMDB_FILE_DEPLOY = '../data/wine_deploy_lmdb'
 
 #Pythony way to check if files exist
 #Since python <3 exceptions
-try:
-    os.remove(LMDB_FILE_TRAIN)
-except OSError:
-    pass
 
-try:
-    os.remove(LMDB_FILE_TEST)
-except OSError:
-    pass
-
-try:
-    os.remove(LMDB_FILE_DEPLOY)
-except OSError:
-    pass
+shutil.rmtree(LMDB_FILE_TRAIN)
+shutil.rmtree(LMDB_FILE_TEST)
+shutil.rmtree(LMDB_FILE_DEPLOY)
 
 #Record CSV
 with open(CSV_FILE) as csvfile:
@@ -52,14 +42,19 @@ with open(CSV_FILE) as csvfile:
     for row in csv_reader:
         
         import_labels[i] = row[0]
-        for j in range(12):
+        for j in range(13):
             import_data[i][j] = row[j+1]
         j=0
         i = i + 1
         
-print "labels[1]", import_labels[1]
-train_labels, test_labels, deploy_labels = np.array_split(import_labels, [50, 70])
-train_data, test_data, deploy_data = np.array_split(import_data, [50, 70])
+state = np.random.get_state()
+np.random.shuffle(import_data)
+np.random.set_state(state)
+np.random.shuffle(import_labels)
+
+		
+train_labels, test_labels, deploy_labels = np.array_split(import_labels, [100, 150])
+train_data, test_data, deploy_data = np.array_split(import_data, [100, 150])
 
 map_size = 2**31 #Setting to the max seems to be the only way this doens't throw errors. 
 
@@ -67,6 +62,8 @@ train_blob = train_data.reshape(train_data.shape[0], train_data.shape[1], 1, 1).
 test_blob = test_data.reshape(test_data.shape[0], test_data.shape[1], 1, 1).astype(np.float)
 deploy_blob = deploy_data.reshape(deploy_data.shape[0], deploy_data.shape[1], 1, 1).astype(np.float)
 
+#TODO: remove
+print "train blob", train_blob[0], "\n", train_blob[1]
 k = 0
 train_env = lmdb.open(LMDB_FILE_TRAIN, map_size=map_size)
 with train_env.begin(write=True) as train_transaction:

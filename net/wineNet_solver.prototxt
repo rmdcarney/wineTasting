@@ -6,7 +6,7 @@ test_iter: 1
 test_interval: 25000
 
 #Base learning rate (step size in gradient descent)
-base_lr: 0.001
+base_lr: 0.0000000001
 #Analogous to physcial momentum: each iteration incorporates the weights which in acceleration from the gradient of loss
 momentum: 0.9
 #Learning rate policy
@@ -18,6 +18,6 @@ stepsize: 100000
 
 max_iter: 350000
 #display: 500
-display: 1000
+display: 5000
 
 solver_mode: GPU
